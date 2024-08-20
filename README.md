@@ -30,6 +30,11 @@ docker rm CONTAINER_ID
 
 
 ## Creating an Application Image
+Docker File --> Docker Build --> Docker Image
+### Docker File:
+```
+
+```
 
 ## Run the application Container
 
