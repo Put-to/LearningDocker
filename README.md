@@ -37,11 +37,12 @@ FROM python:3.11-slim   ##Docker Image for Redis
 LABEL author="Tanishq"   ##Basic label
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
+ENV PORT=8000
 WORKDIR /app
 COPY requirements.txt /app/
 RUN pip install --upgrade pip && pip install -r requirements.txt   ##Run any command
 COPY . .
-EXPOSE 8000  ##Port that can be used to access from outside.
+EXPOSE $PORT  ##Port that can be used to access from outside.
 ENTRYPOINT ["python", "manage.py", "runserver", "0.0.0.0:8000"] ##Run the server
 ```
 
