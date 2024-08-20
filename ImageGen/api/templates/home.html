@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            flex-direction: column;
+        }
+        h1 {
+            color: #444;
+            margin-bottom: 20px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        label {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        input[type="text"] {
+            padding: 10px;
+            width: 300px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #5cb85c;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 0;
+        }
+        button:hover {
+            background-color: #4cae4c;
+        }
+        #result, #default-result {
+            margin-top: 20px;
+            width: 100%;
+            max-width: 600px;
+        }
+        #result img, #default-images img {
+            display: block;
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        #default-images {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        #default-images img {
+            max-width: 48%;
+            margin-bottom: 10px;
+        }
+        #latest-images {
+            margin-top: 40px;
+        }
+        #latest-images h2 {
+            font-size: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .latest-image {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .latest-image img {
+            max-width: 80%;
+            margin-bottom: 10px;
+        }
+        .latest-image p {
+            font-size: 14px;
+            color: #666;
+        }
+    </style>
+    <title>Image Generator</title>
+</head>
+<body>
+    <h1>Generate an Image</h1>
+    
+    <!-- Form to generate an image from a custom prompt -->
+    <form id="image-form" method="post">
+        {% csrf_token %}
+        <label for="prompt">Enter your prompt:</label>
+        <input type="text" id="prompt" name="prompt" required>
+        <button type="submit">Generate Image</button>
+    </form>
+    
+    <!-- Button to generate images from 3 default prompts -->
+    <button id="generate-defaults">Generate Default Images</button>
+    
+    <!-- Section to display the generated image -->
+    <div id="result">
+        <h2>Generated Image:</h2>
+        <img id="generated-image" src="" alt="" style="display:none; max-width: 100%; height: auto;">
+    </div>
+    
+    <!-- Section to display multiple generated images for default prompts -->
+    <div id="default-result">
+        <h2>Generated Images for Default Prompts:</h2>
+        <div id="default-images"></div>
+    </div>
+
+    <!-- Section to display the latest 5 generated images -->
+    <div id="latest-images">
+        <h2>Latest Generated Images:</h2>
+        <div id="latest-images-container">
+            {% for image in latest_images %}
+            <div class="image-container">
+                <img src="data:image/png;base64,{{ image.image_base64 }}" alt="Generated Image" style="max-width: 100%; height: auto;">
+                <p>{{ image.prompt }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script>
+        // Custom prompt form submission
+        document.getElementById("image-form").onsubmit = async function(event) {
+            event.preventDefault();
+            const form = event.target;
+            const formData = new FormData(form);
+            const response = await fetch("", {
+                method: "POST",
+                body: formData,
+                headers: {
+                    "X-CSRFToken": formData.get("csrfmiddlewaretoken")
+                }
+            });
+            const result = await response.json();
+            if (response.ok) {
+                document.getElementById("generated-image").src = `data:image/png;base64,${result.image_base64}`;
+                document.getElementById("generated-image").style.display = "block";
+            } else {
+                alert(result.error || "An error occurred while generating the image.");
+            }
+            
+            // Add the new image to the top of the latest images list
+            addImageToLatest(result.image_base64, result.prompt);
+        };
+
+        // Generate images for 3 default prompts
+        document.getElementById("generate-defaults").onclick = async function() {
+        const response = await fetch("{% url 'generate_default_images' %}", {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": "{{ csrf_token }}"
+            }
+        });
+
+        const result = await response.json();
+        const defaultImagesDiv = document.getElementById("default-images");
+        defaultImagesDiv.innerHTML = "";
+
+        if (result.images && result.images.length > 0) {
+            result.images.forEach(image => {
+                const img = document.createElement("img");
+                img.src = "data:image/png;base64," + image.image_base64;
+                img.alt = "Generated Image";
+                img.style.maxWidth = "100%";
+                img.style.height = "auto";
+                defaultImagesDiv.appendChild(img);
+
+                // Add the new images to the top of the latest images list
+                addImageToLatest(image.image_base64);
+            });
+        } else if (result.error) {
+            console.error("Error generating images: " + result.error);
+        }
+    };
+
+        // Function to add a new image to the latest images list
+        function addImageToLatest(image_base64, prompt) {
+            const latestImagesContainer = document.getElementById("latest-images-container");
+            const imageContainer = document.createElement("div");
+            imageContainer.className = "image-container";
+            
+            const img = document.createElement("img");
+            img.src = "data:image/png;base64," + image_base64;
+            img.alt = "Generated Image";
+            img.style.maxWidth = "100%";
+            img.style.height = "auto";
+            
+            const p = document.createElement("p");
+            p.textContent = prompt;
+            
+            imageContainer.appendChild(img);
+            imageContainer.appendChild(p);
+            latestImagesContainer.prepend(imageContainer);
+
+            // Limit to 5 images
+            if (latestImagesContainer.children.length > 5) {
+                latestImagesContainer.removeChild(latestImagesContainer.lastChild);
+            }
+        }
+    </script>
+</body>
+</html>
