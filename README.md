@@ -31,7 +31,7 @@ docker rm CONTAINER_ID
 
 ## Creating an Application Image
 Docker File --> Docker Build --> Docker Image
-### Docker File for Redis SErver:
+### Docker File for Redis Server:
 ```
 FROM python:3.11-slim   ##Docker Image for Redis
 LABEL author="Tanishq"   ##Basic label
@@ -45,6 +45,7 @@ COPY . .
 EXPOSE $PORT  ##Port that can be used to access from outside.
 ENTRYPOINT ["python", "manage.py", "runserver", "0.0.0.0:8000"] ##Run the server
 ```
+### Create a .dockerignore file and add files you don't want to copy.
 
 ## Run the application Container
 
