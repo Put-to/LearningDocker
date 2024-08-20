@@ -7,10 +7,11 @@ For this, I'll mainly use a Python Django app and a ReactJs app.
 - Easy to Automate
 - Version Safety/Environment Consistency - Makes sure the project is always running in the same Environment.
 
-### When Docker?
-- 
-
 ## Environment Setup
+Install Docker Desktop on Windows/Mac
+Install Docker Engine on Linux
+
+Test wether docker is properly installed by running a default container
 
 ## Creating an Application Image
 
