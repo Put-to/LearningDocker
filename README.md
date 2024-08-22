@@ -47,8 +47,28 @@ ENTRYPOINT ["python", "manage.py", "runserver", "0.0.0.0:8000"] ##Run the server
 ```
 ### Create a .dockerignore file and add files you don't want to copy.
 
-## Run the application Container
+## Building the Docker Image
+Run the build command in the terminal where your dockerfile is located.
+'.' after the command specifies where the dockerfile is located.
+```
+docker build -t python_server .
 
+```
+If your dockerfile is named something other than .dockerfile, use -f to select it
+```
+docker build -t python_server -f python.dockerfile .
+```
+
+## Run the application Container
+To run the Docker image, make sure the docker engine is running. Then use the run command.
+```
+docker run -d -p 8000:8000 python_server
+```
+-p 8000:8000 makes sure that the 8000 port inside the image is available on 8000 port outside the image
+To stop the Docker application ise stop command
+```
+docker stop <container_id>
+```
 ## Communication between Containers
 
 ## Docker Compose
