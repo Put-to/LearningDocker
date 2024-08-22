@@ -100,6 +100,19 @@ as
 docker build -t putato/python_server:1.0 -f python.dockerfile .
 ```
 
+login to docker
+```
+docker login
+```
+Now use the push command to push to Docker Hub by default
+```
+docker push <Image>
+```
+as
+```
+docker push putato/python_server:1.0
+```
+
 ## Communication between Containers
 
 ## Docker Compose
