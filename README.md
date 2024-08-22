@@ -65,10 +65,41 @@ To run the Docker image, make sure the docker engine is running. Then use the ru
 docker run -d -p 8000:8000 python_server
 ```
 -p 8000:8000 makes sure that the 8000 port inside the image is available on 8000 port outside the image
-To stop the Docker application ise stop command
+To stop the Docker application use stop command
 ```
 docker stop <container_id>
 ```
+
+Remove the Container using the rm command
+```
+docker rm <container_id>
+```
+
+Remove the docker image using the rmi command
+```
+docker rmi python_server
+```
+
+Use the ps command to see all container Id, names and ports
+```
+docker ps
+```
+
+Use logs to view the log of the image
+```
+docker logs <container_id_or_name>
+```
+
+## Deploy this image to register
+Build an image with your username
+```
+docker build -t <username>/<imagename>:<tag> -f <Dockerfile> .
+```
+as
+```
+docker build -t putato/python_server:1.0 -f python.dockerfile .
+```
+
 ## Communication between Containers
 
 ## Docker Compose
