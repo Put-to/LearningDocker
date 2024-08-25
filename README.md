@@ -121,6 +121,13 @@ docker pull redis:latest
 docker run -p 6379:6379 -d redis
 ```
 
+## Volumes
+
+A Volume mount protects the data from being lost if the container fails.
+```
+docker run -p <ports> -v <directory> <image>
+```
+
 
 ## Communication between Containers
 
