@@ -60,12 +60,12 @@ docker build -t python_server -f python.dockerfile .
 ```
 
 ## Run the application Container
-To run the Docker image, make sure the docker engine is running. Then use the run command.
+To run the Docker image, make sure the Docker engine is running. Then use the run command.
 ```
 docker run -d -p 8000:8000 python_server
 ```
--p 8000:8000 makes sure that the 8000 port inside the image is available on 8000 port outside the image
-To stop the Docker application use stop command
+-p 8000:8000 makes sure that the 8000 port inside the image is available on the 8000 port outside the image
+To stop the Docker application use the stop command
 ```
 docker stop <container_id>
 ```
@@ -80,7 +80,7 @@ Remove the docker image using the rmi command
 docker rmi python_server
 ```
 
-Use the ps command to see all container Id, names and ports
+Use the ps command to see all container Id, names, and ports
 ```
 docker ps
 ```
@@ -112,6 +112,15 @@ as
 ```
 docker push putato/python_server:1.0
 ```
+
+Pull and run Redis container:
+```
+docker pull redis:latest
+```
+```
+docker run -p 6379:6379 -d redis
+```
+
 
 ## Communication between Containers
 
