@@ -39,10 +39,10 @@ ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 ENV PORT=8000
 WORKDIR /app
-COPY requirements.txt /app/
+COPY requirements.txt ./
 RUN pip install --upgrade pip && pip install -r requirements.txt   ##Run any command
 COPY . .
-EXPOSE $PORT  ##Port that can be used to access from outside.
+EXPOSE $PORT  ##Port that can be accessed from outside.
 ENTRYPOINT ["python", "manage.py", "runserver", "0.0.0.0:8000"] ##Run the server
 ```
 ### Create a .dockerignore file and add files you don't want to copy.
@@ -128,7 +128,36 @@ A Volume mount protects the data from being lost if the container fails.
 docker run -p <ports> -v <directory> <image>
 ```
 
+as
+
+```
+docker run -d -p 8000:8000 -v${pwd}/db:/app/db python_server
+```
+
 
 ## Communication between Containers
+
+### Bridge Network
+Creates a bridge that helps containers to talk to each other. Only the containers connected via bridges will be able to talk to each other.
+
+### Create a Bridge:
+```
+docker network create --driver bridge <Network_Name>
+```
+See all networks:
+```
+docker network ls
+```
+Remove a network:
+```
+docker network rm <network>
+```
+
+### Add a container to the bridge when running:
+```
+docker run -d --net=<Network_name> --name<Container_name> <Custom_Container_name>
+```
+
+
 
 ## Docker Compose
