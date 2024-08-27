@@ -166,3 +166,57 @@ docker run -d --net=<Network_name> --name<Container_name> <Custom_Container_name
 - Start and Stop services
 - Stream the log output of running services
 
+### Indentation matters with YAML files
+
+### Sample Docker-compose file:
+```
+version: '3.8'
+
+services:
+  django:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000
+    depends_on:
+      - redis
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+
+  celery:
+    build: .
+    command: celery -A ImageGen worker -l info -P eventlet
+    volumes:
+      - .:/app
+    depends_on:
+      - redis
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+  
+
+```
+
+
+### Build a docker-compose file
+```
+docker-compose build
+```
+
+### Run services
+```
+docker-compose up
+```
+
+### Shut down and delete a container
+```
+docker-compose down
+```
