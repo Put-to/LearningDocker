@@ -1,6 +1,6 @@
 # LearningDocker
 This is a docker learning path. I may set it to public in the future.
-For this, I'll mainly use a Python Django app and a ReactJs app.
+For this, I'll mainly use a Python Django app.
 
 ### Why Docker?
 - Run apps anywhere
