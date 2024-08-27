@@ -179,7 +179,7 @@ services:
     volumes:
       - .:/app
     ports:
-      - "8000:8000
+      - "8000:8000"
     depends_on:
       - redis
     environment:
