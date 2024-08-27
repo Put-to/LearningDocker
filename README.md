@@ -161,3 +161,8 @@ docker run -d --net=<Network_name> --name<Container_name> <Custom_Container_name
 
 
 ## Docker Compose
+- Uses YAML config Files
+- Build one or more images
+- Start and Stop services
+- Stream the log output of running services
+
