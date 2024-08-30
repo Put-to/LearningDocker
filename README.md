@@ -222,7 +222,7 @@ docker-compose down
 ```
 
 # Extra Stuff 
-- The entire app lifecycle can be managed using docker compose.
+- The entire app lifecycle can be managed using docker-compose.
 - Log all services.
 
 ## YAML
@@ -235,3 +235,19 @@ docker-compose down
   - Sequences of Items
   - Multiple maps can be defined in a list.
 
+
+## Docker Compose Structure:
+- Version: '3.8'
+  - This defines the version Property which enables backwards compatibility.
+  - 2.x version generally uses Python Docker while 3.x version uses Go Docker.
+- services:
+  - This is where all the services are placed. for example Python_Django_server and Redis and Celery.
+  - In a service, one can define the following:
+  - build
+  - environment
+  - image
+  - networks
+  - ports
+  - command
+  - volumes
+  - depends_on
