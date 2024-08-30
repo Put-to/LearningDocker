@@ -220,3 +220,18 @@ docker-compose up
 ```
 docker-compose down
 ```
+
+# Extra Stuff 
+- The entire app lifecycle can be managed using docker compose.
+- Log all services.
+
+## YAML
+- Uses Maps and Lists
+- Indentation matters
+-  Maps:
+- - name: Value Pairs
+   - Maps can contain other maps for more complex data structures.
+- Lists:
+- - Sequences of Items
+  - Multiple maps can be defined in a list.
+
